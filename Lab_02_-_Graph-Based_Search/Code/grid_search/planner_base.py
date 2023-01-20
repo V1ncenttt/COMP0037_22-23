@@ -245,13 +245,17 @@ class PlannerBase(object):
 
         # Q2a:
         # Add code to construct the rest of the path
+        while cell is not None:
+            path.waypoints.append(cell)
+            cell = cell.parent
+            
 
         # Now mark the cells as being on the path and show them. We do
         # this as a separate step to show going from the start to the goal
         for waypoint in path.waypoints:
             if (waypoint.is_start is False) and (waypoint.is_goal is False):
                 waypoint.is_on_path = True
-
+                
             if (self._show_graphics == True):
                 self._search_grid_drawer.update()
                 time.sleep(self._path_pause_time_in_seconds)
@@ -260,14 +264,14 @@ class PlannerBase(object):
         if self._goal_reached is False:
             path.path_travel_cost = float('inf')
             return path
-            
+           
         # Now go forwards through the path and construct the cost. We could do it
         # going backwards at path assembly time, but this is easier!
-        path_cost = 0
+        path_cost = len(path.waypoints)
 
         # Q2b: For the path, work out the length and the
         # number of cells traversed
-
+        path.path_travel_cost = path_cost
         # Return the path
         return path
 
